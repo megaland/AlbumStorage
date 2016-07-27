@@ -8,30 +8,39 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 
 
 public class AddPanel extends JPanel{
-	JLabel genre, singer, writer, writerrythm, release, publisher, planner;
-	JTextField genretf, singertf, writertf, writerrythmtf, releasetf, publishertf, plannertf;
-	JTextArea textarea;
+	JLabel genre, singer, writer, writerrythm, relday, publisher, planner;
+	JTextField genretf, singertf, writertf, writerrythmtf, reldaytf, publishertf, plannertf;
+	JTextArea introduce;
 	BufferedImage img;
-	JPanel centerleftpn, centerrightpn, bottompn, bottomsouthpn;
+	JPanel centerleftpn, centerrightpn, bottompn, bottomsouthpn, centerleftpicturepn;
 	JPanel centerdividepn;
 	JPanel picturefeaturepn;
 	JButton picturechangebtn, savebtn;
 	String dirname;
 	String filename;
-
+	JScrollPane scrollpane;
+	DBConnector connector;
+	String imgpath;
 	public AddPanel() {
 		setLayout(new BorderLayout());
-		
+		connector = DBConnector.getDBconnector();
 
 		//센터패널
 		centerdividepn = new JPanel();
@@ -40,7 +49,9 @@ public class AddPanel extends JPanel{
 		centerleftpn = new JPanel();
 		centerleftpn.setLayout(new BorderLayout());
 		picturefeaturepn = new JPanel();
-
+		centerleftpicturepn = new JPanel();
+		centerleftpn.add(centerleftpicturepn, BorderLayout.CENTER);
+		
 		picturechangebtn = new JButton("사진바꾸기");
 		picturechangebtn.addActionListener(new ActionListener() {
 			
@@ -53,8 +64,16 @@ public class AddPanel extends JPanel{
 				dialog.setVisible(true);
 				dirname = dialog.getDirectory();
 				filename = dialog.getFile();
-				
+				imgpath = dirname + filename;
 				System.out.println(dirname + filename);
+				
+				try {
+					img = ImageIO.read(new File(dirname+filename));
+					repaint();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
 			}
 		});
@@ -77,6 +96,7 @@ public class AddPanel extends JPanel{
 		centerrightpn.add(singer);
 		singertf = new JTextField();
 		centerrightpn.add(singertf);
+		
 		//----작사
 		writer = new JLabel("작사");
 		centerrightpn.add(writer);
@@ -90,10 +110,10 @@ public class AddPanel extends JPanel{
 		writerrythmtf = new JTextField();
 		centerrightpn.add(writerrythmtf);
 		//----발매일
-		release = new JLabel("발매일");
-		centerrightpn.add(release);
-		releasetf = new JTextField();
-		centerrightpn.add(releasetf);
+		relday = new JLabel("발매일");
+		centerrightpn.add(relday);
+		reldaytf = new JTextField();
+		centerrightpn.add(reldaytf);
 		
 		//----발매사
 		publisher = new JLabel("발매사");
@@ -116,7 +136,9 @@ public class AddPanel extends JPanel{
 		
 		bottompn = new JPanel();
 		bottompn.setLayout(new BorderLayout());
-		textarea = new JTextArea(5,35);
+		introduce = new JTextArea(5,35);
+		scrollpane = new JScrollPane(introduce);
+		scrollpane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER );
 		bottomsouthpn = new JPanel();
 		savebtn = new JButton("저장하기");
 		savebtn.addActionListener(new ActionListener() {
@@ -124,13 +146,32 @@ public class AddPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//저장
+				AlbumData albumdata = new AlbumData();
+				albumdata.setGenre(genretf.getText());
+				albumdata.setSinger(singertf.getText());
+				albumdata.setWriter(writertf.getText());
+				albumdata.setWriterrythm(writerrythmtf.getText());
+				albumdata.setPublisher(publishertf.getText());
+				albumdata.setRelday(reldaytf.getText());
+				albumdata.setIntroduce(introduce.getText());
+				albumdata.setPlanner(plannertf.getText());
+				
+				InputStream imgstream = null;
+				try {
+					imgstream = new FileInputStream(new File(imgpath));
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+				albumdata.setImgstream(imgstream);
+				connector.insertIntoDB(albumdata);
+				imgpath = "";
 				System.out.println("저장합니다");
 				
 			}
 		});
 		bottomsouthpn.add(savebtn);
 
-		bottompn.add(textarea, BorderLayout.CENTER);
+		bottompn.add(scrollpane, BorderLayout.CENTER);
 		bottompn.add(bottomsouthpn, BorderLayout.SOUTH);
 		add(bottompn, BorderLayout.SOUTH);
 		
@@ -141,7 +182,8 @@ public class AddPanel extends JPanel{
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		g.drawRect(0, 0, 10, 10);
-	
+		if(img != null){
+			g.drawImage(img, (int)(centerleftpicturepn.getWidth()*0.05), (int)(centerleftpicturepn.getHeight()*0.05), (int)(centerleftpicturepn.getWidth()*0.85), centerleftpicturepn.getHeight(), null);
+		}
 	}
 }

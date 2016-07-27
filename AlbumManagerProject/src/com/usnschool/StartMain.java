@@ -3,6 +3,7 @@ package com.usnschool;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -13,6 +14,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.ScrollPaneLayout;
 
 public class StartMain {
 
@@ -26,16 +31,17 @@ class AlbumUI extends JFrame implements ActionListener{
 	JPanel toppn, middlepn, bottompn, leftpn, leftpn2;
 	JButton showlistbtn, managebtn;
 	JButton albumlistbtn, songlistbtn;
-	JButton addbtn;
-	
+	JButton addbtn, songaddbtn;
+	DBConnector connector = null;
+	JScrollPane scrollpane;
 	public AlbumUI() {
 		
 		setTitle("Album Manager");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(500, 800);
+		setSize(600, 450);
 		setLayout(new BorderLayout());
-		setResizable(false);
-	
+		//setResizable(false);
+		connector = DBConnector.getDBconnector();
 	
 		//탑부분
 		toppn = new JPanel();
@@ -50,21 +56,20 @@ class AlbumUI extends JFrame implements ActionListener{
 		managebtn.addActionListener(this);
 		toppn.add(managebtn);
 		
-	
-	
-		
 		add(toppn, BorderLayout.NORTH);
-		
-		
+
 		
 		//왼쪽
 		//----리스트보기
 		leftpn = new JPanel();
-		leftpn.setLayout(new GridLayout(30, 1));
+		leftpn.setLayout(new GridLayout(15,1));
+
 		leftpn.setBackground(Color.yellow);
 		
-		
+		Dimension leftbtndimension = new Dimension();
+		leftbtndimension.setSize(100, 50);
 		albumlistbtn = new JButton("앨범리스트");
+		albumlistbtn.setPreferredSize(leftbtndimension);
 		albumlistbtn.addActionListener(this);
 		leftpn.add(albumlistbtn);
 		
@@ -78,20 +83,31 @@ class AlbumUI extends JFrame implements ActionListener{
 		
 		//----매니저보기
 		leftpn2 = new JPanel();
-		leftpn2.setLayout(new GridLayout(30, 1));
+		leftpn2.setLayout(new GridLayout(15, 1));
 		leftpn2.setBackground(Color.yellow);
-		addbtn = new JButton("추가");
-		addbtn.addActionListener(this);	
 		
+		addbtn = new JButton("앨범추가");
+		addbtn.setPreferredSize(leftbtndimension);
+		addbtn.addActionListener(this);	
 		leftpn2.add(addbtn);
+		
+		
+		songaddbtn = new JButton("곡추가");
+		songaddbtn.setPreferredSize(leftbtndimension);
+		songaddbtn.addActionListener(this);
+		leftpn2.add(songaddbtn);
+		
 		leftpn2.setVisible(false);
 		
 		
 		
 		//미들
 		middlepn = new JPanel();
-		middlepn.setBackground(Color.gray);
-		add(middlepn, BorderLayout.CENTER);
+		middlepn.setBackground(Color.black);
+		middlepn.setLayout(new BoxLayout(middlepn, BoxLayout.Y_AXIS));
+	
+		scrollpane = new JScrollPane(middlepn);
+		add(scrollpane, BorderLayout.CENTER);
 		
 		//바텀
 		bottompn = new JPanel();
@@ -112,28 +128,41 @@ class AlbumUI extends JFrame implements ActionListener{
 					add(leftpn, BorderLayout.WEST);
 					leftpn.setVisible(true);
 					System.out.println("목록버튼");
-					repaint();
 				}else if(eventobj == managebtn){//관리
 					leftpn.setVisible(false);
 					add(leftpn2, BorderLayout.WEST);
 					leftpn2.setVisible(true);
 					System.out.println("관리버튼"); 
-					repaint();
+				
 				}else if(eventobj == albumlistbtn){
+					middlepn.setVisible(false);
+					middlepn.removeAll();
+				
+					ShowListPanel showpanel = new ShowListPanel();
+					middlepn.add(showpanel);
+					middlepn.setVisible(true);
 					System.out.println("앨범버튼");
 				}else if(eventobj == songlistbtn){
-					System.out.println("송버튼");
+					System.out.println("곡버튼");
 				}else if(eventobj == addbtn){
-					middlepn.setVisible(false);
-					AddPanel addpanel = new AddPanel();
 					
-					middlepn.add(addpanel, BorderLayout.CENTER);
+					middlepn.setVisible(false);
+					middlepn.removeAll();
+					AddPanel addpanel = new AddPanel();
+					middlepn.add(addpanel);
 					middlepn.setVisible(true);
 					System.out.println("추가버튼");
+				
+					
+				}else if(eventobj == songaddbtn){
+					middlepn.setVisible(false);
+					middlepn.removeAll();
+					SongAddPanel songaddpanel = new SongAddPanel();
+					middlepn.add(songaddpanel);
+					middlepn.setVisible(true);
+					System.out.println("곡추가버튼");
 				}
-			
-
-		
+				repaint();
 	}
 	
 }
