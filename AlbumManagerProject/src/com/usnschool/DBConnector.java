@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.usnschool.SongAddPanel.EachSong;
+
 
 
 public class DBConnector {
@@ -25,17 +27,46 @@ public class DBConnector {
 			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/melon", "root", "nfc123");
 			System.out.println("db connected");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 	}
+	public void insertIntoSongDB(ArrayList<SongAddPanel.EachSong> eachsonglist, int currentnum){
+		String sql = "insert into songtbl (albumnum, songname, songcontent)"
+				+ " values(?, ?, ?)";
+		for (int i = 0; i < eachsonglist.size(); i++) {
+			PreparedStatement pstm = null;
+			try {
+				pstm = con.prepareStatement(sql);
+				pstm.setInt(1, currentnum);
+				pstm.setString(2, eachsonglist.get(i).getSongname());
+				pstm.setString(3, eachsonglist.get(i).getSongcontent());
+				pstm.execute();
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}finally{
+				if(pstm !=null){
+					try {
+						pstm.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			
+		}
+
+		
+	}
+	
+	
 	
 	public void insertIntoDB(AlbumData albumdata){
 		
 		try {
-			String sql = "insert into albumtbl (genre, singer, writer, writerrythm, relday, publisher, planner, introduce, imgstream) "
-					+ "values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String sql = "insert into albumtbl (genre, singer, writer, writerrythm, relday, publisher, planner, introduce, imgstream, albumname) "
+					+ "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstm = con.prepareStatement(sql);
 			pstm.setString(1, albumdata.getGenre());
 			pstm.setString(2, albumdata.getSinger());
@@ -46,6 +77,7 @@ public class DBConnector {
 			pstm.setString(7, albumdata.getPlanner());
 			pstm.setString(8, albumdata.getIntroduce());
 			pstm.setBinaryStream(9, albumdata.getImgstream());
+			pstm.setString(10, albumdata.getAlbumname());
 			pstm.execute();
 			
 		} catch (SQLException e) {
@@ -109,6 +141,7 @@ public class DBConnector {
 				albumdata.setSinger(rs.getString("singer"));
 				albumdata.setWriter(rs.getString("writer"));
 				albumdata.setWriterrythm(rs.getString("writerrythm"));
+				albumdata.setAlbumname(rs.getString("albumname"));
 				arrdata.add(albumdata);
 			}
 			
@@ -136,4 +169,44 @@ public class DBConnector {
 		return arrdata;
 	}
 
+	public ArrayList<SongData> getSongDataList(int albumnum){
+		ArrayList<SongData> songdatalist = new ArrayList<>();
+		String sql = "select * from songtbl where albumnum = "+ albumnum;
+		Statement st = null;
+		ResultSet rs = null;
+		try {
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+			
+			while(rs.next()){
+				SongData songdata = new SongData();
+				songdata.setNum(rs.getInt("num"));
+				songdata.setAlbumnum(rs.getInt("albumnum"));
+				songdata.setSongname(rs.getString("songname"));
+				songdata.setSongcontent(rs.getString("songcontent"));
+				songdatalist.add(songdata);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			if(st != null){
+				try {
+					st.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(rs != null){
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return songdatalist;
+	}
+	
 }

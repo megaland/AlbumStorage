@@ -13,6 +13,7 @@ public class AlbumData {
 	private String planner;
 	private String introduce;
 	private InputStream imgstream;
+	private String albumname;
 	public int getNum() {
 		return num;
 	}
@@ -72,6 +73,12 @@ public class AlbumData {
 	}
 	public void setImgstream(InputStream imgstream) {
 		this.imgstream = imgstream;
+	}
+	public String getAlbumname() {
+		return albumname;
+	}
+	public void setAlbumname(String albumname) {
+		this.albumname = albumname;
 	}
 
 	

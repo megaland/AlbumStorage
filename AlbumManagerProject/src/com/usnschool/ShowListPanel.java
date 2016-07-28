@@ -20,6 +20,8 @@ public class ShowListPanel extends JPanel {
 	ImgPanel imgpanel;
 	public ShowListPanel() {
 		setLayout(new GridLayout(15,1));
+		
+
 		connector = DBConnector.getDBconnector();
 		ArrayList<AlbumData> arrdata = connector.getAlbumList();
 		pn = new JPanel[arrdata.size()];
@@ -27,13 +29,27 @@ public class ShowListPanel extends JPanel {
 		Dimension dimension = new Dimension();
 		dimension.setSize(20, 50);
 		
-		System.out.println(arrdata.size());
+		JPanel titlepanel = new JPanel();
+		JLabel titlelabel1 = new JLabel("번호" ,SwingConstants.CENTER);
+		titlepanel.add(titlelabel1);
+		JLabel titlelabel2 = new JLabel("그림" , SwingConstants.CENTER);
+		titlepanel.add(titlelabel2);
+		JLabel titlelabel3 = new JLabel("가수" , SwingConstants.CENTER);
+		titlepanel.add(titlelabel3);
+		JLabel titlelabel4 = new JLabel("장르" , SwingConstants.CENTER);
+		titlepanel.add(titlelabel4);
+		JLabel titlelabel5 = new JLabel("발매일" , SwingConstants.CENTER);
+		titlepanel.add(titlelabel5);
+		titlepanel.setLayout(new GridLayout(1,5));
+		titlepanel.setPreferredSize(dimension);
+		add(titlepanel);
+		
 		label = new JLabel[arrdata.size()][4];
 		for (int i = 0; i < arrdata.size(); i++) {
 			pn[i] = new JPanel();
 			pn[i].setPreferredSize(dimension);
 			pn[i].setLayout(new GridLayout(1,5));
-			label[i][0] = new JLabel(""+i, SwingConstants.CENTER);	
+			label[i][0] = new JLabel(""+(i+1), SwingConstants.CENTER);	
 			label[i][1] = new JLabel(arrdata.get(i).getSinger(), SwingConstants.CENTER);
 			label[i][2] = new JLabel(arrdata.get(i).getGenre(), SwingConstants.CENTER);
 			label[i][3] = new JLabel(arrdata.get(i).getRelday(), SwingConstants.CENTER);

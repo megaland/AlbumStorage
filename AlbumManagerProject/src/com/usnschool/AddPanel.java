@@ -25,8 +25,8 @@ import javax.swing.ScrollPaneConstants;
 
 
 public class AddPanel extends JPanel{
-	JLabel genre, singer, writer, writerrythm, relday, publisher, planner;
-	JTextField genretf, singertf, writertf, writerrythmtf, reldaytf, publishertf, plannertf;
+	JLabel genre, singer, writer, writerrythm, relday, publisher, planner, albumname;
+	JTextField genretf, singertf, writertf, writerrythmtf, reldaytf, publishertf, plannertf, albumnametf;
 	JTextArea introduce;
 	BufferedImage img;
 	JPanel centerleftpn, centerrightpn, bottompn, bottomsouthpn, centerleftpicturepn;
@@ -84,7 +84,14 @@ public class AddPanel extends JPanel{
 		
 		//--우
 		centerrightpn = new JPanel();
-		centerrightpn.setLayout(new GridLayout(7,2));
+		centerrightpn.setLayout(new GridLayout(8,2));
+		
+		//----앨범명
+		albumname = new JLabel("앨범명");
+		centerrightpn.add(albumname);
+		albumnametf = new JTextField(2);
+		centerrightpn.add(albumnametf);
+		
 		//----장르
 		genre = new JLabel("장르");
 		centerrightpn.add(genre);

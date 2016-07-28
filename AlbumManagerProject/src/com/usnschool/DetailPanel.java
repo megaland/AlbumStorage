@@ -5,26 +5,37 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.TextArea;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Currency;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
 public class DetailPanel extends JFrame{
-	private JLabel genre, singer, writer, writerrythm, relday, publisher, planner;
-	private JLabel genretf, singertf, writertf, writerrythmtf, reldaytf, publishertf, plannertf;
+	private JLabel genre, singer, writer, writerrythm, relday, publisher, planner, albumname;
+	private JLabel genretf, singertf, writertf, writerrythmtf, reldaytf, publishertf, plannertf, albumnametf;
 	private JTextArea introduce;
+	private int albumnum;
+	private final int FRAME_WIDTH = 500;
+	private final int FRAME_HEIGHT = 500;
+	private final int SONG_PANEL_HEIGHT = 50;
+	private int curreny;
 	
 	public DetailPanel(int inumf) {
 		setTitle("상세보기");
-		setSize(500,500);
+		setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		setResizable(false);
 		
 		//전체패널
@@ -57,7 +68,17 @@ public class DetailPanel extends JFrame{
 		//-상단의 우
 		JPanel toprightpn = new JPanel();
 		
-		toprightpn.setLayout(new GridLayout(7,2));
+		toprightpn.setLayout(new GridLayout(8,2));
+		
+		//----앨범번호넣기
+		albumnum = albumdata.getNum();
+		
+		//----앨범명
+		albumname = new JLabel("앨범명");
+		toprightpn.add(albumname);
+		albumnametf = new JLabel(albumdata.getAlbumname());
+		toprightpn.add(albumnametf);
+		
 		//----장르
 		genre = new JLabel("장르");
 		toprightpn.add(genre);
@@ -108,6 +129,7 @@ public class DetailPanel extends JFrame{
 		//중단패널
 		JPanel centerpn = new JPanel();
 		introduce = new JTextArea(6, 40);
+		introduce.setText(albumdata.getIntroduce());
 		introduce.setEditable(false);
 		JScrollPane introscrollpane = new JScrollPane(introduce);
 		centerpn.add(introscrollpane);
@@ -118,9 +140,19 @@ public class DetailPanel extends JFrame{
 		
 		//하단패널
 		JPanel bottompn = new JPanel();
+		bottompn.setLayout(null);
 		bottompn.setBackground(Color.gray);
-		bottompn.setPreferredSize(new Dimension(30, 300));
+		bottompn.setPreferredSize(new Dimension(30, 100));
 		mainpn.add(bottompn);
+		ArrayList<SongData> songdata = connector.getSongDataList(albumnum);
+		for (int i = 0; i < songdata.size(); i++) {
+			
+			DetailSongListPanel songpn = new DetailSongListPanel(songdata.get(i), i);
+			songpn.setBounds(0, curreny,  FRAME_WIDTH, SONG_PANEL_HEIGHT);
+			curreny += SONG_PANEL_HEIGHT;
+			bottompn.setPreferredSize(new Dimension(30, 100+curreny));
+			bottompn.add(songpn);
+		}
 		
 		setVisible(true);
 		
@@ -128,21 +160,39 @@ public class DetailPanel extends JFrame{
 	
 	class DetailImgPanel extends JPanel{
 		BufferedImage is ;
-		
 		DetailImgPanel(BufferedImage is) {
 			this.is = is;
-
 		}
 
-	
-		
 		@Override
 		public void paint(Graphics g) {
 			g.drawImage(is, (int)(getWidth()*0.05), (int)(getHeight()*0.05), (int)(getWidth()*0.9), (int)(getHeight()*0.9), null);
-			
-			
 		}
-		
-		
 	}
+
+	class DetailSongListPanel extends JPanel{
+		
+		public DetailSongListPanel(SongData songdata, int songnum) {
+			setLayout(null);
+			JLabel songnumla = new JLabel(""+(songnum+1) , SwingConstants.CENTER);
+			songnumla.setBounds(0, 0, 150, SONG_PANEL_HEIGHT);
+			add(songnumla);
+			
+			JLabel songname = new JLabel(songdata.getSongname(), SwingConstants.LEFT);
+			songname.setBounds(150, 0, 250, SONG_PANEL_HEIGHT);
+			add(songname);
+			
+			JButton songcontentshow = new JButton("크게보기");
+			songcontentshow.setBounds(350, 0, 100, SONG_PANEL_HEIGHT);
+			songcontentshow.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					new SongContentDetail(songdata);
+				}
+			});
+
+			add(songcontentshow);
+		}
+	}
+	
 }

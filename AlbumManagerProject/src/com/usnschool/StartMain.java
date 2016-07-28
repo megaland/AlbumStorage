@@ -40,7 +40,7 @@ class AlbumUI extends JFrame implements ActionListener{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(600, 450);
 		setLayout(new BorderLayout());
-		//setResizable(false);
+		setResizable(false);
 		connector = DBConnector.getDBconnector();
 	
 		//탑부분
