@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import com.usnschool.SongAddPanel.EachSong;
-
 
 
 public class DBConnector {
@@ -63,11 +61,11 @@ public class DBConnector {
 	
 	
 	public void insertIntoDB(AlbumData albumdata){
-		
+		PreparedStatement pstm =null;
 		try {
 			String sql = "insert into albumtbl (genre, singer, writer, writerrythm, relday, publisher, planner, introduce, imgstream, albumname) "
 					+ "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-			PreparedStatement pstm = con.prepareStatement(sql);
+			pstm = con.prepareStatement(sql);
 			pstm.setString(1, albumdata.getGenre());
 			pstm.setString(2, albumdata.getSinger());
 			pstm.setString(3, albumdata.getWriter());
@@ -83,8 +81,84 @@ public class DBConnector {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally{
+			if(pstm !=null){
+				try {
+					pstm.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
+	
+	public void updateAlbum(AlbumData albumdata){
+		String sql = "update albumtbl set genre= ?, singer=?, writer=?,"
+				+ " writerrythm=?, relday=?, publisher=?, planner=?,"
+				+ " introduce=?, imgstream=?,albumname=? where num = ?";
+		PreparedStatement pstm = null;
+		try {
+			
+			pstm = con.prepareStatement(sql);
+			pstm.setString(1, albumdata.getGenre());
+			pstm.setString(2, albumdata.getSinger());
+			pstm.setString(3, albumdata.getWriter());
+			pstm.setString(4, albumdata.getWriterrythm());
+			pstm.setString(5, albumdata.getRelday());
+			pstm.setString(6, albumdata.getPublisher());
+			pstm.setString(7, albumdata.getPlanner());
+			pstm.setString(8, albumdata.getIntroduce());
+			pstm.setBinaryStream(9, albumdata.getImgstream());
+			pstm.setString(10, albumdata.getAlbumname());
+			pstm.setInt(11, albumdata.getNum());
+			pstm.execute();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			if(pstm !=null){
+				try {
+					pstm.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+		
+	public void updateAlbumNo(AlbumData albumdata){
+		String sql = "update albumtbl set genre= ?, singer=?, writer=?,"
+				+ " writerrythm=?, relday=?, publisher=?, planner=?,"
+				+ " introduce=?,albumname=? where num = ?";
+		PreparedStatement pstm = null;
+		try {
+			
+			pstm = con.prepareStatement(sql);
+			pstm.setString(1, albumdata.getGenre());
+			pstm.setString(2, albumdata.getSinger());
+			pstm.setString(3, albumdata.getWriter());
+			pstm.setString(4, albumdata.getWriterrythm());
+			pstm.setString(5, albumdata.getRelday());
+			pstm.setString(6, albumdata.getPublisher());
+			pstm.setString(7, albumdata.getPlanner());
+			pstm.setString(8, albumdata.getIntroduce());
+			pstm.setString(9, albumdata.getAlbumname());
+			pstm.setInt(10, albumdata.getNum());
+			pstm.execute();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			if(pstm !=null){
+				try {
+					pstm.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	public int getAlbumCount(){
 		Statement st = null;
 		ResultSet rs = null;
@@ -209,4 +283,45 @@ public class DBConnector {
 		return songdatalist;
 	}
 	
+	public ArrayList<SongData> getSongDataList (){
+		Statement st = null;
+		ResultSet rs = null;
+		ArrayList<SongData> songdatalist = new ArrayList<>();
+		String sql = "select * from songtbl";
+		
+		try {
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+			
+			while(rs.next()){
+				SongData songdata = new SongData();
+				songdata.setNum(rs.getInt("num"));
+				songdata.setSongname(rs.getString("songname"));
+				songdata.setSongcontent(rs.getString("songcontent"));
+				songdata.setAlbumnum(rs.getInt("albumnum"));
+				songdatalist.add(songdata);
+				System.out.println("songname " + rs.getString("songname"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			if(st != null){
+				try {
+					st.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(rs != null){
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return songdatalist;
+	}
 }

@@ -7,6 +7,7 @@ import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -35,14 +36,16 @@ class AlbumUI extends JFrame implements ActionListener{
 	DBConnector connector = null;
 	JScrollPane scrollpane;
 	public AlbumUI() {
-		
+
 		setTitle("Album Manager");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(600, 450);
+		//Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
+		//setLocation((int)(screensize.getWidth()/2-getWidth()/2), (int)(screensize.getHeight()/2-getHeight()/2));
 		setLayout(new BorderLayout());
 		setResizable(false);
 		connector = DBConnector.getDBconnector();
-	
+		
 		//탑부분
 		toppn = new JPanel();
 		toppn.setBackground(Color.green);
@@ -117,7 +120,7 @@ class AlbumUI extends JFrame implements ActionListener{
 		setVisible(true);
 		
 	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -143,6 +146,11 @@ class AlbumUI extends JFrame implements ActionListener{
 					middlepn.setVisible(true);
 					System.out.println("앨범버튼");
 				}else if(eventobj == songlistbtn){
+					middlepn.setVisible(false);
+					middlepn.removeAll();
+					SongListPanel songlistpanel = new SongListPanel();
+					middlepn.add(songlistpanel);
+					middlepn.setVisible(true);
 					System.out.println("곡버튼");
 				}else if(eventobj == addbtn){
 					

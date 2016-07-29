@@ -2,6 +2,7 @@ package com.usnschool;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FileDialog;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.TextArea;
@@ -9,7 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Currency;
 
@@ -21,18 +24,23 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 public class DetailPanel extends JFrame{
 	private JLabel genre, singer, writer, writerrythm, relday, publisher, planner, albumname;
-	private JLabel genretf, singertf, writertf, writerrythmtf, reldaytf, publishertf, plannertf, albumnametf;
+	private JTextField genretf, singertf, writertf, writerrythmtf, reldaytf, publishertf, plannertf, albumnametf;
 	private JTextArea introduce;
 	private int albumnum;
 	private final int FRAME_WIDTH = 500;
 	private final int FRAME_HEIGHT = 500;
 	private final int SONG_PANEL_HEIGHT = 50;
 	private int curreny;
-	
+	private boolean btncheck = true;
+	private AlbumData albumdata;
+	private BufferedImage img;
+	private DetailImgPanel topleftpn;
+	private InputStream tempinputstream;
 	public DetailPanel(int inumf) {
 		setTitle("상세보기");
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -53,12 +61,11 @@ public class DetailPanel extends JFrame{
 		
 		//-상단의 좌
 		DBConnector connector = DBConnector.getDBconnector();
-		AlbumData albumdata = ((connector.getAlbumList()).get(inumf));
-		DetailImgPanel topleftpn = null;
+		albumdata = ((connector.getAlbumList()).get(inumf));
+		topleftpn = null;
 		try {
-			topleftpn = new DetailImgPanel(ImageIO.read(albumdata.getImgstream()));
-			System.out.println("상단의 좌 : ");
-			System.out.println(albumdata.getImgstream().hashCode());
+			tempinputstream = albumdata.getImgstream();
+			topleftpn = new DetailImgPanel(ImageIO.read(tempinputstream));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -76,57 +83,157 @@ public class DetailPanel extends JFrame{
 		//----앨범명
 		albumname = new JLabel("앨범명");
 		toprightpn.add(albumname);
-		albumnametf = new JLabel(albumdata.getAlbumname());
+		albumnametf = new JTextField(albumdata.getAlbumname());
+		albumnametf.setEditable(false);
 		toprightpn.add(albumnametf);
 		
 		//----장르
 		genre = new JLabel("장르");
 		toprightpn.add(genre);
-		genretf = new JLabel(albumdata.getGenre());
+		genretf = new JTextField(albumdata.getGenre());
+		genretf.setEditable(false);
 		toprightpn.add(genretf);
 		//----가수
 		
 		singer = new JLabel("가수");
 		toprightpn.add(singer);
-		singertf = new JLabel(albumdata.getSinger());
+		singertf = new JTextField(albumdata.getSinger());
+		singertf.setEditable(false);
 		toprightpn.add(singertf);
 		
 		//----작사
 		writer = new JLabel("작사");
 		toprightpn.add(writer);
-		writertf = new JLabel(albumdata.getWriter());
+		writertf = new JTextField(albumdata.getWriter());
+		writertf.setEditable(false);
 		toprightpn.add(writertf);
 		
 		//----작곡
 		
 		writerrythm = new JLabel("작곡");
 		toprightpn.add(writerrythm);
-		writerrythmtf = new JLabel(albumdata.getWriterrythm());
+		writerrythmtf = new JTextField(albumdata.getWriterrythm());
+		writerrythmtf.setEditable(false);
 		toprightpn.add(writerrythmtf);
 		//----발매일
 		relday = new JLabel("발매일");
 		toprightpn.add(relday);
-		reldaytf = new JLabel(albumdata.getRelday());
+		reldaytf = new JTextField(albumdata.getRelday());
+		reldaytf.setEditable(false);
 		toprightpn.add(reldaytf);
 		
 		//----발매사
 		publisher = new JLabel("발매사");
 		toprightpn.add(publisher);
-		publishertf = new JLabel(albumdata.getPublisher());
+		publishertf = new JTextField(albumdata.getPublisher());
+		publishertf.setEditable(false);
 		toprightpn.add(publishertf);
 		
 		//----기획사
 		planner = new JLabel("기획사");
 		toprightpn.add(planner);
-		plannertf = new JLabel(albumdata.getPlanner());
+		plannertf = new JTextField(albumdata.getPlanner());
+		plannertf.setEditable(false);
 		toprightpn.add(plannertf);
 		
 		
 		toppn.add(toprightpn);
-	
 		mainpn.add(toppn);
 		
-		//중단패널
+		//버튼 패널
+		JPanel buttonpn = new JPanel();
+		buttonpn.setBackground(Color.darkGray);
+		JButton modifybtn = new JButton("수정하기");
+		modifybtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(btncheck){
+					genretf.setEditable(true);
+					singertf.setEditable(true);
+					writertf.setEditable(true);
+					writerrythmtf.setEditable(true);
+					reldaytf.setEditable(true);
+					publishertf.setEditable(true);
+					plannertf.setEditable(true);
+					albumnametf.setEditable(true);
+					introduce.setEditable(true);
+					modifybtn.setText("수정완료");
+					btncheck = false;
+				}else {
+					albumdata.setGenre(genretf.getText());
+					albumdata.setSinger(singertf.getText());
+					albumdata.setWriter(writertf.getText());
+					albumdata.setWriterrythm(writerrythmtf.getText());
+					albumdata.setRelday(reldaytf.getText());
+					albumdata.setPublisher(publishertf.getText());
+					albumdata.setPlanner(plannertf.getText());
+					albumdata.setAlbumname(albumnametf.getText());
+					albumdata.setIntroduce(introduce.getText());
+					//albumdata.setImgstream(tempinputstream);
+					System.out.println(albumdata.getImgstream()==tempinputstream);
+					//inputstream을 그대로 사용해서 업데이트를 하면 그림이 제대로 저장이 안된다.
+					if(albumdata.getImgstream()==tempinputstream){
+						connector.updateAlbumNo(albumdata);
+					}else{
+						connector.updateAlbum(albumdata);
+					}
+					
+					
+					
+					
+					genretf.setEditable(false);
+					singertf.setEditable(false);
+					writertf.setEditable(false);
+					writerrythmtf.setEditable(false);
+					reldaytf.setEditable(false);
+					publishertf.setEditable(false);
+					plannertf.setEditable(false);
+					albumnametf.setEditable(false);
+					introduce.setEditable(false);
+					modifybtn.setText("수정하기");
+					btncheck = true;
+					System.out.println("수정되었습니다.");
+				}
+				
+				
+			}
+		});
+		buttonpn.add(modifybtn);
+		
+		JButton picturechangebtn = new JButton("사진바꾸기");
+		picturechangebtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame jf = new JFrame();
+				jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				FileDialog dialog = new FileDialog(jf,"Open", FileDialog.LOAD);
+				dialog.setFile("*.*");
+				dialog.setVisible(true);
+				String dirname = dialog.getDirectory();
+				String filename = dialog.getFile();
+				String imgpath = dirname + filename;
+				System.out.println(dirname + filename);
+				
+				try {
+					File file = new File(dirname+filename);
+					albumdata.setImgstream(new FileInputStream(file));
+					img = ImageIO.read(file);
+					topleftpn.setIs(img);
+					repaint();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		buttonpn.add(picturechangebtn);
+		
+		
+		mainpn.add(buttonpn);
+		
+		//중간패널
 		JPanel centerpn = new JPanel();
 		introduce = new JTextArea(6, 40);
 		introduce.setText(albumdata.getIntroduce());
@@ -159,14 +266,19 @@ public class DetailPanel extends JFrame{
 	}
 	
 	class DetailImgPanel extends JPanel{
-		BufferedImage is ;
+		BufferedImage is;
 		DetailImgPanel(BufferedImage is) {
 			this.is = is;
 		}
 
 		@Override
 		public void paint(Graphics g) {
+			
 			g.drawImage(is, (int)(getWidth()*0.05), (int)(getHeight()*0.05), (int)(getWidth()*0.9), (int)(getHeight()*0.9), null);
+		}
+		
+		public void setIs(BufferedImage img){
+			is = img;
 		}
 	}
 
@@ -177,6 +289,7 @@ public class DetailPanel extends JFrame{
 			JLabel songnumla = new JLabel(""+(songnum+1) , SwingConstants.CENTER);
 			songnumla.setBounds(0, 0, 150, SONG_PANEL_HEIGHT);
 			add(songnumla);
+			
 			
 			JLabel songname = new JLabel(songdata.getSongname(), SwingConstants.LEFT);
 			songname.setBounds(150, 0, 250, SONG_PANEL_HEIGHT);
