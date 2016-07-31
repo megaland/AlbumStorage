@@ -41,6 +41,8 @@ public class DetailPanel extends JFrame{
 	private BufferedImage img;
 	private DetailImgPanel topleftpn;
 	private InputStream tempinputstream;
+	private ArrayList<SongData> songdata;
+	
 	public DetailPanel(int inumf) {
 		setTitle("상세보기");
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -177,10 +179,6 @@ public class DetailPanel extends JFrame{
 					}else{
 						connector.updateAlbum(albumdata);
 					}
-					
-					
-					
-					
 					genretf.setEditable(false);
 					singertf.setEditable(false);
 					writertf.setEditable(false);
@@ -222,13 +220,23 @@ public class DetailPanel extends JFrame{
 					topleftpn.setIs(img);
 					repaint();
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				
 			}
 		});
 		buttonpn.add(picturechangebtn);
+		JButton deletebtn = new JButton("삭제하기");
+		deletebtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				connector.DeleteAlbumAndSong(albumnum);
+				DetailPanel.this.dispose();
+				System.out.println("삭제되었습니다");
+				
+			}
+		});
+		buttonpn.add(deletebtn);
 		
 		
 		mainpn.add(buttonpn);
@@ -251,7 +259,7 @@ public class DetailPanel extends JFrame{
 		bottompn.setBackground(Color.gray);
 		bottompn.setPreferredSize(new Dimension(30, 100));
 		mainpn.add(bottompn);
-		ArrayList<SongData> songdata = connector.getSongDataList(albumnum);
+		songdata = connector.getSongDataList(albumnum);
 		for (int i = 0; i < songdata.size(); i++) {
 			
 			DetailSongListPanel songpn = new DetailSongListPanel(songdata.get(i), i);
@@ -290,12 +298,11 @@ public class DetailPanel extends JFrame{
 			songnumla.setBounds(0, 0, 150, SONG_PANEL_HEIGHT);
 			add(songnumla);
 			
-			
 			JLabel songname = new JLabel(songdata.getSongname(), SwingConstants.LEFT);
 			songname.setBounds(150, 0, 250, SONG_PANEL_HEIGHT);
 			add(songname);
 			
-			JButton songcontentshow = new JButton("크게보기");
+			JButton songcontentshow = new JButton("가사보기");
 			songcontentshow.setBounds(350, 0, 100, SONG_PANEL_HEIGHT);
 			songcontentshow.addActionListener(new ActionListener() {
 				@Override

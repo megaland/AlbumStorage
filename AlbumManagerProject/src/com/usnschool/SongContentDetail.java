@@ -34,4 +34,5 @@ public class SongContentDetail extends JFrame {
 		add(button, BorderLayout.SOUTH);
 		setVisible(true);
 	}
+
 }

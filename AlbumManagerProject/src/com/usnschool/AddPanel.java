@@ -37,7 +37,7 @@ public class AddPanel extends JPanel{
 	String filename;
 	JScrollPane scrollpane;
 	DBConnector connector;
-	String imgpath;
+	String imgpath ="";
 	public AddPanel() {
 		setLayout(new BorderLayout());
 		connector = DBConnector.getDBconnector();
@@ -162,10 +162,14 @@ public class AddPanel extends JPanel{
 				albumdata.setRelday(reldaytf.getText());
 				albumdata.setIntroduce(introduce.getText());
 				albumdata.setPlanner(plannertf.getText());
-				
+				albumdata.setAlbumname(albumnametf.getText());
 				InputStream imgstream = null;
 				try {
-					imgstream = new FileInputStream(new File(imgpath));
+					
+					if(!(imgpath.equals(""))){
+						imgstream = new FileInputStream(new File(imgpath));
+					}
+				
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();
 				}

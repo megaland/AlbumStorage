@@ -22,7 +22,7 @@ public class DBConnector {
 	public DBConnector() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/melon", "root", "nfc123");
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/melon", "root", "nfc1234");
 			System.out.println("db connected");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -195,6 +195,7 @@ public class DBConnector {
 	}
 	
 	
+	
 	public ArrayList<AlbumData> getAlbumList(){
 		Statement st = null;
 		ResultSet rs = null;
@@ -324,4 +325,68 @@ public class DBConnector {
 		
 		return songdatalist;
 	}
+	
+	public void DeleteAlbumAndSong(int albumnum){
+		Statement st = null;
+		String sql = "delete from albumtbl where num = "+ albumnum; 
+		String sql2 = "select * from songtbl where albumnum = " + albumnum; 
+		ResultSet rs = null;
+		
+		
+		try {
+			st = con.createStatement();
+			st.execute(sql);
+			
+			//where 문을 통해 같은 앨범넘버를 가진송들을 삭제를 하게되면 1개만 삭제하게 되기때문에 여러개를 검색후 거기에 맞게 삭제하도록한다.
+			rs = st.executeQuery(sql2);
+			ArrayList<Integer> numlist = new ArrayList<>();
+			while(rs.next()){
+				numlist.add(rs.getInt("num"));
+			}
+			for (int i = 0; i < numlist.size(); i++) {
+				String delsql = "delete from songtbl where num = " + numlist.get(i);
+				st.execute(delsql);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			if(st != null){
+				try {
+					st.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(rs != null){
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		
+		}
+	}
+	
+	public void DeleteSong(int num){
+		Statement st = null;
+		String sql = "delete from songtbl where num = "+ num;
+		
+		try {
+			st = con.createStatement();
+			st.execute(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			if(st != null){
+				try {
+					st.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 }

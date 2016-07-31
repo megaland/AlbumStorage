@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
@@ -55,7 +56,12 @@ public class ShowListPanel extends JPanel {
 			label[i][3] = new JLabel(arrdata.get(i).getRelday(), SwingConstants.CENTER);
 			
 			try {
-				imgpanel = new ImgPanel(ImageIO.read(((arrdata.get(i)).getImgstream())));
+				if(arrdata.get(i).getImgstream()!=null){
+					imgpanel = new ImgPanel(ImageIO.read(((arrdata.get(i)).getImgstream())));
+				}else {
+					imgpanel = new ImgPanel(ImageIO.read(new File("no.bmp")));
+				}
+	
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -20,6 +20,8 @@ public class SongListPanel extends JPanel{
 	final int EACH_PANEL_HEIGHT = 50;
 	JPanel mainpn;
 	JScrollPane scrollpane;
+	DBConnector connector;
+	
 	public SongListPanel() {
 		setLayout(null);
 		setBackground(Color.RED);
@@ -32,7 +34,7 @@ public class SongListPanel extends JPanel{
 		scrollpane = new JScrollPane(mainpn);
 		scrollpane.setBounds(0, 0, PANEL_SIZE_WIDTH, PANEL_SIZE_HEIGHT);
 
-		DBConnector connector = DBConnector.getDBconnector();
+		connector = DBConnector.getDBconnector();
 		ArrayList<SongData> songdatalist = connector.getSongDataList();
 		
 		for (int i = 0; i < songdatalist.size(); i++) {
@@ -66,8 +68,19 @@ public class SongListPanel extends JPanel{
 			songcontent.setBounds(150, 0, 100, EACH_PANEL_HEIGHT);
 			add(songcontent);
 			
+			JButton deletesong = new JButton("삭제하기");
+			deletesong.setBounds(230, 0, 100, EACH_PANEL_HEIGHT);
+			deletesong.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					connector.DeleteSong(songdata.getNum());
+				}
+			});
+			add(deletesong);
+			
+			
 			JButton showbig = new JButton("크게보기");
-			showbig.setBounds(300, 0, 150, EACH_PANEL_HEIGHT);
+			showbig.setBounds(330, 0, 150, EACH_PANEL_HEIGHT);
 			showbig.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
