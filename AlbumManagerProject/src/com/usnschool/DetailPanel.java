@@ -57,7 +57,6 @@ public class DetailPanel extends JFrame{
 		//상단패널
 		JPanel toppn = new JPanel();
 		toppn.setLayout(new GridLayout(1,2));
-		toppn.setBackground(Color.GREEN);
 		toppn.setPreferredSize(new Dimension(150, 300));
 
 		
@@ -248,7 +247,7 @@ public class DetailPanel extends JFrame{
 		introduce.setEditable(false);
 		JScrollPane introscrollpane = new JScrollPane(introduce);
 		centerpn.add(introscrollpane);
-		centerpn.setBackground(Color.blue);
+		centerpn.setBackground(Color.lightGray);
 		centerpn.setPreferredSize(new Dimension(30, 110));
 		mainpn.add(centerpn);
 		
@@ -274,7 +273,7 @@ public class DetailPanel extends JFrame{
 	}
 	
 	class DetailImgPanel extends JPanel{
-		BufferedImage is;
+		private BufferedImage is;
 		DetailImgPanel(BufferedImage is) {
 			this.is = is;
 		}

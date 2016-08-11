@@ -11,11 +11,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 public class SelectAlbumPanel extends JFrame{
-	SongAddPanel songaddpanel;
-	final int FRAME_WIDTH = 300;
-	final int FRAME_HEIGHT = 400;
-	int currentpny = 0;
-	int yincresementvalue = 30; 
+	private SongAddPanel songaddpanel;
+	private final int FRAME_WIDTH = 300;
+	private final int FRAME_HEIGHT = 400;
+	private int currentpny = 0;
+	private int yincresementvalue = 30; 
 	public SelectAlbumPanel(SongAddPanel songaddpanel) {
 		this.songaddpanel = songaddpanel;
 		

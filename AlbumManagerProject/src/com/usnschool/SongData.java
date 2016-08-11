@@ -1,10 +1,13 @@
 package com.usnschool;
 
+import java.io.InputStream;
+
 public class SongData {
 	private int num;
 	private int albumnum;
 	private String songname;
 	private String songcontent;
+	private InputStream songblob;
 	
 	public int getNum() {
 		return num;
@@ -29,6 +32,12 @@ public class SongData {
 	}
 	public void setSongcontent(String songcontent) {
 		this.songcontent = songcontent;
+	}
+	public InputStream getSongblob() {
+		return songblob;
+	}
+	public void setSongblob(InputStream songblob) {
+		this.songblob = songblob;
 	}
 	
 	

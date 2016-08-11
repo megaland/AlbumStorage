@@ -1,5 +1,6 @@
 package com.usnschool;
 
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,8 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-
-
 public class DBConnector {
 	private static DBConnector connector = new DBConnector();  
 	
@@ -17,12 +16,12 @@ public class DBConnector {
 		return connector;
 	}
 	
-	Connection con;
+	private Connection con;
 	
 	public DBConnector() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/melon", "root", "nfc1234");
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/melon", "root", "1234");
 			System.out.println("db connected");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -30,18 +29,29 @@ public class DBConnector {
 		
 	}
 	public void insertIntoSongDB(ArrayList<SongAddPanel.EachSong> eachsonglist, int currentnum){
-		String sql = "insert into songtbl (albumnum, songname, songcontent)"
-				+ " values(?, ?, ?)";
+		String sql = null;
 		for (int i = 0; i < eachsonglist.size(); i++) {
 			PreparedStatement pstm = null;
+			if(eachsonglist.get(i).getSongpath() != null){
+				sql = "insert into songtbl (albumnum, songname, songcontent, songblob)"
+						+ " values(?, ?, ?, ?)";
+			}else {
+				sql = "insert into songtbl (albumnum, songname, songcontent)"
+						+ " values(?, ?, ?)";
+			}
+
 			try {
 				pstm = con.prepareStatement(sql);
 				pstm.setInt(1, currentnum);
 				pstm.setString(2, eachsonglist.get(i).getSongname());
 				pstm.setString(3, eachsonglist.get(i).getSongcontent());
+				if(eachsonglist.get(i).getSongpath() != null){
+					pstm.setBinaryStream(4, new FileInputStream(eachsonglist.get(i).getSongpath()));
+				}
+				
 				pstm.execute();
 				
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}finally{
 				if(pstm !=null){
@@ -227,7 +237,6 @@ public class DBConnector {
 				try {
 					st.close();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -235,7 +244,6 @@ public class DBConnector {
 				try {
 					rs.close();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -300,6 +308,7 @@ public class DBConnector {
 				songdata.setSongname(rs.getString("songname"));
 				songdata.setSongcontent(rs.getString("songcontent"));
 				songdata.setAlbumnum(rs.getInt("albumnum"));
+				songdata.setSongblob(rs.getBinaryStream("songblob"));
 				songdatalist.add(songdata);
 				System.out.println("songname " + rs.getString("songname"));
 			}

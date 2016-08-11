@@ -1,39 +1,57 @@
 package com.usnschool;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 public class SongListPanel extends JPanel{
-	final int PANEL_SIZE_WIDTH = 491;
-	final int PANEL_SIZE_HEIGHT = 372;
-	int currenty = 0;
-	final int EACH_PANEL_HEIGHT = 50;
-	JPanel mainpn;
-	JScrollPane scrollpane;
-	DBConnector connector;
+	private final int PANEL_SIZE_WIDTH = 491;
+	private final int PANEL_SIZE_HEIGHT = 372;
+	private int currenty = 0;
+	private final int EACH_PANEL_HEIGHT = 50;
+	private JPanel mainpn;
+	private JScrollPane scrollpane;
+	private DBConnector connector;
+	private LinkedList<SongData> checkedlist = new LinkedList<>();
 	
 	public SongListPanel() {
 		setLayout(null);
 		setBackground(Color.RED);
 
-		
 		mainpn=  new JPanel();
 		mainpn.setLayout(null);
-		mainpn.setBackground(Color.cyan);
 		
 		scrollpane = new JScrollPane(mainpn);
-		scrollpane.setBounds(0, 0, PANEL_SIZE_WIDTH, PANEL_SIZE_HEIGHT);
+		scrollpane.setBounds(0, EACH_PANEL_HEIGHT-20, PANEL_SIZE_WIDTH, PANEL_SIZE_HEIGHT-20);
 
+		JPanel menupn = new JPanel();
+		menupn.setBounds(0,0, PANEL_SIZE_WIDTH, EACH_PANEL_HEIGHT-20);
+		add(menupn);
+		
+		JButton playbtn = new JButton("선택곡재생하기");
+		playbtn.setPreferredSize(new Dimension(130, EACH_PANEL_HEIGHT-30));
+		playbtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new PlayerFrame(checkedlist);
+			}
+		});
+		menupn.add(playbtn);
+		
 		connector = DBConnector.getDBconnector();
 		ArrayList<SongData> songdatalist = connector.getSongDataList();
 		
@@ -69,7 +87,7 @@ public class SongListPanel extends JPanel{
 			add(songcontent);
 			
 			JButton deletesong = new JButton("삭제하기");
-			deletesong.setBounds(230, 0, 100, EACH_PANEL_HEIGHT);
+			deletesong.setBounds(230, 0+10, 100, EACH_PANEL_HEIGHT-20);
 			deletesong.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -79,8 +97,8 @@ public class SongListPanel extends JPanel{
 			add(deletesong);
 			
 			
-			JButton showbig = new JButton("크게보기");
-			showbig.setBounds(330, 0, 150, EACH_PANEL_HEIGHT);
+			JButton showbig = new JButton("크게");
+			showbig.setBounds(330, 0+10, 100, EACH_PANEL_HEIGHT-20);
 			showbig.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -88,6 +106,23 @@ public class SongListPanel extends JPanel{
 				}
 			});
 			add(showbig);
+			
+			JCheckBox selectedsong = new JCheckBox();
+			selectedsong.setBounds(450, 0, 50, EACH_PANEL_HEIGHT);
+			selectedsong.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					if(e.getStateChange()==e.SELECTED){
+						checkedlist.add(songdata);
+					}else if(e.getStateChange()==e.DESELECTED){
+						checkedlist.remove(songdata);
+					}
+					System.out.println(checkedlist);
+					
+				}
+			});
+			add(selectedsong);
+			
 			
 			mainpn.setPreferredSize(new Dimension(10, currenty+ 50));
 

@@ -15,10 +15,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 public class ShowListPanel extends JPanel {
-	JPanel pn[];
-	JLabel[][] label;
-	DBConnector connector;
-	ImgPanel imgpanel;
+	private JPanel pn[];
+	private JLabel[][] label;
+	private DBConnector connector;
+	private ImgPanel imgpanel;
 	public ShowListPanel() {
 		setLayout(new GridLayout(15,1));
 		
@@ -96,7 +96,7 @@ public class ShowListPanel extends JPanel {
 		
 		@Override
 		public void paint(Graphics g) {
-			g.drawImage(is, 0, 0, 50, getParent().getHeight(), null);
+			g.drawImage(is, 22, 0, 50, getParent().getHeight(), null);
 			
 		}
 	}

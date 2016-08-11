@@ -2,6 +2,7 @@ package com.usnschool;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FileDialog;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -37,7 +39,6 @@ public class SongAddPanel extends JPanel{
 		
 		//메인패널
 		JPanel mainpn = new JPanel();
-		mainpn.setBackground(Color.black);
 		mainpn.setLayout(null);
 		
 		add(mainpn);
@@ -74,21 +75,21 @@ public class SongAddPanel extends JPanel{
 		center.setLayout(null);
 		center.setBounds(0, topheight, mainpnwidth, mainpnheight-topheight*2);
 	
-		center.setBackground(Color.ORANGE);
+		
 		centerscrollpane = new JScrollPane(center);
 		centerscrollpane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		centerscrollpane.setBounds(0, topheight, mainpnwidth, mainpnheight-topheight*2);
 		
 		addpn = new JPanel();
-		addpn.setBounds(0, 0, mainpnwidth, topheight);
 		addpn.setBackground(Color.gray);
+		addpn.setBounds(0, 0, mainpnwidth, topheight);
 		JButton addpnbtn = new JButton("+");
 		addpnbtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//더해지는 노래추가 패널
 				EachSong songaddpn = new EachSong(currentplusnum);
-				songaddpn.setBackground(Color.blue);
+				songaddpn.setBackground(Color.CYAN);
 				songaddpn.setBounds(0, currentplusbtny, mainpnwidth, topheight);
 				
 				eachsonglist.add(songaddpn);
@@ -113,7 +114,7 @@ public class SongAddPanel extends JPanel{
 		//하단
 		JPanel bottom = new JPanel();
 		bottom.setBounds(0, mainpnheight-topheight, mainpnwidth, topheight);
-		bottom.setBackground(Color.blue);
+		bottom.setBackground(Color.green);
 		JButton savebtn = new JButton("저장하기");
 		savebtn.addActionListener(new ActionListener() {
 			@Override
@@ -138,6 +139,7 @@ public class SongAddPanel extends JPanel{
 		private int panelnum;
 		private JTextField songname;
 		private JTextField songcontent;
+		private String songpath;
 		public EachSong(int panelnum) {
 			this.panelnum = panelnum;
 			setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -174,13 +176,13 @@ public class SongAddPanel extends JPanel{
 			//곡명
 			JLabel songnamela = new JLabel("곡명");
 			add(songnamela);
-			songname = new JTextField(13);
+			songname = new JTextField(10);
 			add(songname);
 			
 			//가사
 			JLabel songcontentla = new JLabel("가사");
 			add(songcontentla);
-			songcontent = new JTextField(13);
+			songcontent = new JTextField(10);
 			add(songcontent);
 			JButton inputcontent = new JButton("크게");
 			inputcontent.addActionListener(new ActionListener() {
@@ -190,16 +192,38 @@ public class SongAddPanel extends JPanel{
 				}
 			});
 			add(inputcontent);
+			
+			JButton songblob = new JButton("추가");
+			songblob.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JFrame jf = new JFrame();
+					jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					FileDialog dialog = new FileDialog(jf,"Open", FileDialog.LOAD);
+					dialog.setFile("*.*");
+					dialog.setVisible(true);
+					String dirname = dialog.getDirectory();
+					String filename = dialog.getFile();
+					songpath = dirname + filename;
+				}
+			});
+			add(songblob);
 		}
+		
 		public void setPanelnum(){
 			panelnum--;
 		}
+		
 		public String getSongname(){
 			return songname.getText();
 		}
 		
 		public String getSongcontent(){
 			return songcontent.getText();
+		}
+		
+		public String getSongpath(){
+			return songpath;
 		}
 	}
 

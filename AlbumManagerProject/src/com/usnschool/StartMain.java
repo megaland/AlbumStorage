@@ -29,17 +29,18 @@ public class StartMain {
 }
 
 class AlbumUI extends JFrame implements ActionListener{
-	JPanel toppn, middlepn, bottompn, leftpn, leftpn2;
-	JButton showlistbtn, managebtn;
-	JButton albumlistbtn, songlistbtn;
-	JButton addbtn, songaddbtn;
-	DBConnector connector = null;
-	JScrollPane scrollpane;
+	private JPanel toppn, middlepn, bottompn, leftpn, leftpn2;
+	private JButton showlistbtn, managebtn;
+	private JButton albumlistbtn, songlistbtn;
+	private JButton addbtn, songaddbtn;
+	private DBConnector connector = null;
+	private JScrollPane scrollpane;
 	public AlbumUI() {
 
 		setTitle("Album Manager");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(600, 450);
+		//화면 가운데로 위치
 		//Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
 		//setLocation((int)(screensize.getWidth()/2-getWidth()/2), (int)(screensize.getHeight()/2-getHeight()/2));
 		setLayout(new BorderLayout());
@@ -48,7 +49,7 @@ class AlbumUI extends JFrame implements ActionListener{
 		
 		//탑부분
 		toppn = new JPanel();
-		toppn.setBackground(Color.green);
+		toppn.setBackground(Color.red);
 		toppn.setAlignmentX(CENTER_ALIGNMENT);
 		
 		showlistbtn = new JButton("리스트보기");
@@ -67,7 +68,7 @@ class AlbumUI extends JFrame implements ActionListener{
 		leftpn = new JPanel();
 		leftpn.setLayout(new GridLayout(15,1));
 
-		leftpn.setBackground(Color.yellow);
+		leftpn.setBackground(Color.red);
 		
 		Dimension leftbtndimension = new Dimension();
 		leftbtndimension.setSize(100, 50);
@@ -87,7 +88,7 @@ class AlbumUI extends JFrame implements ActionListener{
 		//----매니저보기
 		leftpn2 = new JPanel();
 		leftpn2.setLayout(new GridLayout(15, 1));
-		leftpn2.setBackground(Color.yellow);
+		leftpn2.setBackground(Color.red);
 		
 		addbtn = new JButton("앨범추가");
 		addbtn.setPreferredSize(leftbtndimension);
@@ -112,11 +113,7 @@ class AlbumUI extends JFrame implements ActionListener{
 		scrollpane = new JScrollPane(middlepn);
 		add(scrollpane, BorderLayout.CENTER);
 		
-		//바텀
-		bottompn = new JPanel();
-		bottompn.setBackground(Color.cyan);
-		add(bottompn, BorderLayout.SOUTH);
-		
+
 		setVisible(true);
 		
 	}

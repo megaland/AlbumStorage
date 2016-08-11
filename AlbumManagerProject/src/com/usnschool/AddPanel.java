@@ -25,19 +25,20 @@ import javax.swing.ScrollPaneConstants;
 
 
 public class AddPanel extends JPanel{
-	JLabel genre, singer, writer, writerrythm, relday, publisher, planner, albumname;
-	JTextField genretf, singertf, writertf, writerrythmtf, reldaytf, publishertf, plannertf, albumnametf;
-	JTextArea introduce;
-	BufferedImage img;
-	JPanel centerleftpn, centerrightpn, bottompn, bottomsouthpn, centerleftpicturepn;
-	JPanel centerdividepn;
-	JPanel picturefeaturepn;
-	JButton picturechangebtn, savebtn;
-	String dirname;
-	String filename;
-	JScrollPane scrollpane;
-	DBConnector connector;
-	String imgpath ="";
+	private JLabel genre, singer, writer, writerrythm, relday, publisher, planner, albumname;
+	private JTextField genretf, singertf, writertf, writerrythmtf, reldaytf, publishertf, plannertf, albumnametf;
+	private JTextArea introduce;
+	private BufferedImage img;
+	private JPanel centerleftpn, centerrightpn, bottompn, bottomsouthpn, centerleftpicturepn;
+	private JPanel centerdividepn;
+	private JPanel picturefeaturepn;
+	private JButton picturechangebtn, savebtn;
+	private String dirname;
+	private String filename;
+	private JScrollPane scrollpane;
+	private DBConnector connector;
+	private String imgpath ="";
+	
 	public AddPanel() {
 		setLayout(new BorderLayout());
 		connector = DBConnector.getDBconnector();
@@ -71,7 +72,6 @@ public class AddPanel extends JPanel{
 					img = ImageIO.read(new File(dirname+filename));
 					repaint();
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				
@@ -111,11 +111,11 @@ public class AddPanel extends JPanel{
 		centerrightpn.add(writertf);
 		
 		//----작곡
-		
 		writerrythm = new JLabel("작곡");
 		centerrightpn.add(writerrythm);
 		writerrythmtf = new JTextField();
 		centerrightpn.add(writerrythmtf);
+		
 		//----발매일
 		relday = new JLabel("발매일");
 		centerrightpn.add(relday);
@@ -187,8 +187,6 @@ public class AddPanel extends JPanel{
 		add(bottompn, BorderLayout.SOUTH);
 		
 		setVisible(true);
-		
-		
 	}
 	@Override
 	public void paint(Graphics g) {
