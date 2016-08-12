@@ -19,10 +19,10 @@ public class ShowListPanel extends JPanel {
 	private JLabel[][] label;
 	private DBConnector connector;
 	private ImgPanel imgpanel;
+	
 	public ShowListPanel() {
 		setLayout(new GridLayout(15,1));
 		
-
 		connector = DBConnector.getDBconnector();
 		ArrayList<AlbumData> arrdata = connector.getAlbumList();
 		pn = new JPanel[arrdata.size()];
@@ -72,7 +72,6 @@ public class ShowListPanel extends JPanel {
 			pn[i].add(label[i][2]);
 			pn[i].add(label[i][3]);
 			
-			
 			//여기서 사용되고 있는 객체를 JFrame으로 넘겨주면 안되는듯 같은 객체를 사용해서
 			final int inumf = i;
 			pn[i].addMouseListener(new MouseAdapter() {
@@ -92,8 +91,7 @@ public class ShowListPanel extends JPanel {
 		public ImgPanel(BufferedImage is) {
 			this.is = is;
 		}
-		
-		
+
 		@Override
 		public void paint(Graphics g) {
 			g.drawImage(is, 22, 0, 50, getParent().getHeight(), null);

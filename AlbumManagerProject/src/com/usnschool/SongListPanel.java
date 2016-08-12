@@ -1,22 +1,18 @@
 package com.usnschool;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.LinkedList;
-
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 
 public class SongListPanel extends JPanel{
 	private final int PANEL_SIZE_WIDTH = 491;
@@ -57,7 +53,6 @@ public class SongListPanel extends JPanel{
 		
 		for (int i = 0; i < songdatalist.size(); i++) {
 			SongListRowPanel songpanel = new SongListRowPanel(songdatalist.get(i), i);
-			
 			mainpn.add(songpanel);
 			System.out.println(i);
 			currenty += EACH_PANEL_HEIGHT;
@@ -77,7 +72,6 @@ public class SongListPanel extends JPanel{
 			songnum.setBounds(20, 0, 50, EACH_PANEL_HEIGHT);
 			add(songnum);
 			
-			
 			JLabel songname = new JLabel(songdata.getSongname());
 			songname.setBounds(50, 0, 100, EACH_PANEL_HEIGHT);
 			add(songname);
@@ -95,7 +89,6 @@ public class SongListPanel extends JPanel{
 				}
 			});
 			add(deletesong);
-			
 			
 			JButton showbig = new JButton("크게");
 			showbig.setBounds(330, 0+10, 100, EACH_PANEL_HEIGHT-20);
@@ -117,12 +110,9 @@ public class SongListPanel extends JPanel{
 					}else if(e.getStateChange()==e.DESELECTED){
 						checkedlist.remove(songdata);
 					}
-					System.out.println(checkedlist);
-					
 				}
 			});
 			add(selectedsong);
-			
 			
 			mainpn.setPreferredSize(new Dimension(10, currenty+ 50));
 

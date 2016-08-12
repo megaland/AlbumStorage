@@ -5,17 +5,13 @@ import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Currency;
-
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -59,7 +55,6 @@ public class DetailPanel extends JFrame{
 		toppn.setLayout(new GridLayout(1,2));
 		toppn.setPreferredSize(new Dimension(150, 300));
 
-		
 		//-상단의 좌
 		DBConnector connector = DBConnector.getDBconnector();
 		albumdata = ((connector.getAlbumList()).get(inumf));
@@ -110,12 +105,12 @@ public class DetailPanel extends JFrame{
 		toprightpn.add(writertf);
 		
 		//----작곡
-		
 		writerrythm = new JLabel("작곡");
 		toprightpn.add(writerrythm);
 		writerrythmtf = new JTextField(albumdata.getWriterrythm());
 		writerrythmtf.setEditable(false);
 		toprightpn.add(writerrythmtf);
+		
 		//----발매일
 		relday = new JLabel("발매일");
 		toprightpn.add(relday);
@@ -170,8 +165,6 @@ public class DetailPanel extends JFrame{
 					albumdata.setPlanner(plannertf.getText());
 					albumdata.setAlbumname(albumnametf.getText());
 					albumdata.setIntroduce(introduce.getText());
-					//albumdata.setImgstream(tempinputstream);
-					System.out.println(albumdata.getImgstream()==tempinputstream);
 					//inputstream을 그대로 사용해서 업데이트를 하면 그림이 제대로 저장이 안된다.
 					if(albumdata.getImgstream()==tempinputstream){
 						connector.updateAlbumNo(albumdata);
@@ -191,8 +184,6 @@ public class DetailPanel extends JFrame{
 					btncheck = true;
 					System.out.println("수정되었습니다.");
 				}
-				
-				
 			}
 		});
 		buttonpn.add(modifybtn);
@@ -210,7 +201,6 @@ public class DetailPanel extends JFrame{
 				String dirname = dialog.getDirectory();
 				String filename = dialog.getFile();
 				String imgpath = dirname + filename;
-				System.out.println(dirname + filename);
 				
 				try {
 					File file = new File(dirname+filename);
@@ -231,13 +221,10 @@ public class DetailPanel extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				connector.DeleteAlbumAndSong(albumnum);
 				DetailPanel.this.dispose();
-				System.out.println("삭제되었습니다");
 				
 			}
 		});
 		buttonpn.add(deletebtn);
-		
-		
 		mainpn.add(buttonpn);
 		
 		//중간패널
@@ -250,7 +237,6 @@ public class DetailPanel extends JFrame{
 		centerpn.setBackground(Color.lightGray);
 		centerpn.setPreferredSize(new Dimension(30, 110));
 		mainpn.add(centerpn);
-		
 		
 		//하단패널
 		JPanel bottompn = new JPanel();
@@ -290,7 +276,6 @@ public class DetailPanel extends JFrame{
 	}
 
 	class DetailSongListPanel extends JPanel{
-		
 		public DetailSongListPanel(SongData songdata, int songnum) {
 			setLayout(null);
 			JLabel songnumla = new JLabel(""+(songnum+1) , SwingConstants.CENTER);

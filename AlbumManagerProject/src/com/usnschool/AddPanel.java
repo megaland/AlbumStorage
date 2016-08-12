@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,7 +21,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
-
 
 public class AddPanel extends JPanel{
 	private JLabel genre, singer, writer, writerrythm, relday, publisher, planner, albumname;
@@ -140,7 +138,6 @@ public class AddPanel extends JPanel{
 		add(centerdividepn, BorderLayout.CENTER);
 
 		//바텀패널
-		
 		bottompn = new JPanel();
 		bottompn.setLayout(new BorderLayout());
 		introduce = new JTextArea(5,35);
@@ -176,7 +173,6 @@ public class AddPanel extends JPanel{
 				albumdata.setImgstream(imgstream);
 				connector.insertIntoDB(albumdata);
 				imgpath = "";
-				System.out.println("저장합니다");
 				
 			}
 		});

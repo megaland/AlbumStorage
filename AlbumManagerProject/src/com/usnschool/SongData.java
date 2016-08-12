@@ -39,6 +39,4 @@ public class SongData {
 	public void setSongblob(InputStream songblob) {
 		this.songblob = songblob;
 	}
-	
-	
 }

@@ -14,6 +14,7 @@ public class AlbumData {
 	private String introduce;
 	private InputStream imgstream;
 	private String albumname;
+	
 	public int getNum() {
 		return num;
 	}
@@ -80,7 +81,4 @@ public class AlbumData {
 	public void setAlbumname(String albumname) {
 		this.albumname = albumname;
 	}
-
-	
-	
 }

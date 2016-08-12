@@ -8,8 +8,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -40,7 +38,6 @@ public class SongAddPanel extends JPanel{
 		//메인패널
 		JPanel mainpn = new JPanel();
 		mainpn.setLayout(null);
-		
 		add(mainpn);
 		
 		//상단
@@ -55,7 +52,6 @@ public class SongAddPanel extends JPanel{
 		//--문자레이블
 		albumname = new JLabel("선택된 앨범");
 		top.add(albumname);
-		
 		
 		//--앨범선택버튼
 		JButton selectbtn = new JButton("앨범선택");
@@ -75,9 +71,9 @@ public class SongAddPanel extends JPanel{
 		center.setLayout(null);
 		center.setBounds(0, topheight, mainpnwidth, mainpnheight-topheight*2);
 	
-		
 		centerscrollpane = new JScrollPane(center);
-		centerscrollpane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		centerscrollpane.setHorizontalScrollBarPolicy(
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		centerscrollpane.setBounds(0, topheight, mainpnwidth, mainpnheight-topheight*2);
 		
 		addpn = new JPanel();
@@ -98,9 +94,8 @@ public class SongAddPanel extends JPanel{
 				currentplusbtny += topheight;
 				addpn.setBounds(0, currentplusbtny, mainpnwidth, topheight);
 				
-			
-			
-				center.setPreferredSize(new Dimension(mainpnwidth, mainpnheight-topheight*4+currentplusbtny));
+				center.setPreferredSize(new Dimension(mainpnwidth,
+						mainpnheight-topheight*4+currentplusbtny));
 				centerscrollpane.setViewportView(center);
 				currentplusnum++;
 				System.out.println(currentplusnum);
@@ -109,7 +104,6 @@ public class SongAddPanel extends JPanel{
 		addpn.add(addpnbtn);
 		center.add(addpn);
 		mainpn.add(centerscrollpane);
-		
 		
 		//하단
 		JPanel bottom = new JPanel();
@@ -131,8 +125,6 @@ public class SongAddPanel extends JPanel{
 		});
 		bottom.add(savebtn);
 		mainpn.add(bottom);
-		
-		
 	}
 	
 	class EachSong extends JPanel{
@@ -156,21 +148,22 @@ public class SongAddPanel extends JPanel{
 
 					//누른위치 다음패널들 이동
 					for (int i = EachSong.this.panelnum; i < eachsonglist.size(); i++) {
-						eachsonglist.get(i).setBounds(0, (int)(eachsonglist.get(i).getBounds().getY()-topheight), mainpnwidth, topheight);
+						eachsonglist.get(i).setBounds(0, (int)(eachsonglist.get(i).getBounds().getY()-topheight)
+								, mainpnwidth, topheight);
 						eachsonglist.get(i).setPanelnum();
 					}
+					
 					//+버튼이동
 					currentplusbtny -= topheight;
 					currentplusnum--;
 					addpn.setBounds(0, currentplusbtny, mainpnwidth, topheight);
 					
 					//스크롤팬 변경
-					center.setPreferredSize(new Dimension(mainpnwidth, mainpnheight-topheight*4+currentplusbtny));
+					center.setPreferredSize(new Dimension(mainpnwidth,
+							mainpnheight-topheight*4+currentplusbtny));
 					centerscrollpane.setViewportView(center);
-
 				}
 			});
-
 			add(jbtn);
 			
 			//곡명
@@ -226,14 +219,11 @@ public class SongAddPanel extends JPanel{
 			return songpath;
 		}
 	}
-
-	
 	
 	public void setCurrentAlbum(int currentnum, String currentstring){
 		this.currentnum = currentnum;
 		this.currentstring = currentstring;
 		albumname.setText(currentstring);
-		
 	}
 	
 

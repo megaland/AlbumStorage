@@ -46,8 +46,6 @@ public class SelectAlbumPanel extends JFrame{
 			mainpn.add(listpanel[i]);
 			currentpny += yincresementvalue;
 		}
-		
-		
 		setVisible(true);
 	}
 	
@@ -59,20 +57,21 @@ public class SelectAlbumPanel extends JFrame{
 			setBounds(0, currentpny, FRAME_WIDTH, yincresementvalue);
 			
 			int labelx = 0;
-			System.out.println(albumdata.getGenre());
+			
 			//앨범이름
 			JLabel alumname = new JLabel(albumdata.getAlbumname());
 			alumname.setBounds(10, 0, (labelx += (int)(FRAME_WIDTH*6/10)), yincresementvalue);
 			add(alumname);
+			
 			//장르
 			JLabel genre = new JLabel(albumdata.getGenre());
 			genre.setBounds(labelx , 0, (labelx += (int)(FRAME_WIDTH*2/10)), yincresementvalue);
 			add(genre);
+			
 			//가수이름
 			JLabel singer = new JLabel(albumdata.getSinger());
 			singer.setBounds(labelx, 0, (labelx += (int)(FRAME_WIDTH*2/10)), yincresementvalue);
 			add(singer);
-			
 			
 			setVisible(true);
 		}

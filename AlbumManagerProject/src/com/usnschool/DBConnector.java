@@ -28,6 +28,7 @@ public class DBConnector {
 		}
 		
 	}
+	
 	public void insertIntoSongDB(ArrayList<SongAddPanel.EachSong> eachsonglist, int currentnum){
 		String sql = null;
 		for (int i = 0; i < eachsonglist.size(); i++) {
@@ -62,13 +63,8 @@ public class DBConnector {
 					}
 				}
 			}
-			
 		}
-
-		
 	}
-	
-	
 	
 	public void insertIntoDB(AlbumData albumdata){
 		PreparedStatement pstm =null;
@@ -89,7 +85,6 @@ public class DBConnector {
 			pstm.execute();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
 			if(pstm !=null){
@@ -186,7 +181,6 @@ public class DBConnector {
 					try {
 						st.close();
 					} catch (SQLException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -194,7 +188,6 @@ public class DBConnector {
 					try {
 						rs.close();
 					} catch (SQLException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -203,8 +196,6 @@ public class DBConnector {
 	
 		return count;
 	}
-	
-	
 	
 	public ArrayList<AlbumData> getAlbumList(){
 		Statement st = null;
@@ -248,7 +239,6 @@ public class DBConnector {
 				}
 			}
 		}
-		
 		return arrdata;
 	}
 
@@ -288,7 +278,6 @@ public class DBConnector {
 				}
 			}
 		}
-		
 		return songdatalist;
 	}
 	
@@ -331,7 +320,6 @@ public class DBConnector {
 				}
 			}
 		}
-		
 		return songdatalist;
 	}
 	
@@ -346,7 +334,6 @@ public class DBConnector {
 			st = con.createStatement();
 			st.execute(sql);
 			
-			//where 문을 통해 같은 앨범넘버를 가진송들을 삭제를 하게되면 1개만 삭제하게 되기때문에 여러개를 검색후 거기에 맞게 삭제하도록한다.
 			rs = st.executeQuery(sql2);
 			ArrayList<Integer> numlist = new ArrayList<>();
 			while(rs.next()){
